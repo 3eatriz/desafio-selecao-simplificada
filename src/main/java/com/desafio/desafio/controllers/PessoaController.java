@@ -1,7 +1,12 @@
 package com.desafio.desafio.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.desafio.desafio.domain.pessoa.DadosCadastroPessoa;
 import com.desafio.desafio.domain.pessoa.DadosDetalhamentoPessoa;
+import com.desafio.desafio.domain.pessoa.DadosListagemPessoa;
 import com.desafio.desafio.domain.pessoa.Pessoa;
 import com.desafio.desafio.domain.pessoa.PessoaRepository;
 
@@ -32,5 +38,11 @@ public class PessoaController {
         var uri = uriBuilder.path("/pessoas/{id}").buildAndExpand(pessoa.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoPessoa(pessoa));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DadosListagemPessoa>> listar(){
+        var page = repository.findAll().stream().map(DadosListagemPessoa::new).toList();
+        return ResponseEntity.ok(page);
     }
 }
