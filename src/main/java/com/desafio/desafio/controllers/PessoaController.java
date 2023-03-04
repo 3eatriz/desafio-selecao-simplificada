@@ -48,6 +48,13 @@ public class PessoaController {
         return ResponseEntity.ok(page);
     }
 
+    //Get organizado por fila
+    @GetMapping("/organizado")
+    public ResponseEntity<List<DadosListagemPessoa>> listarOrganizado(){
+        var page = repository.findAllPessoasOrderedByPosicaoFilaDesc().stream().map(DadosListagemPessoa::new).toList();
+        return ResponseEntity.ok(page);
+    }
+
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoPessoa dados){
